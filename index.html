@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>country</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+    <div style="height: 100vh;" class="d-flex justify-content-center w-100 bg-dark">
+        <div class="mt-3">
+    <h1 class="text-warning mt-3 mb-3">Know More About Countries:</h1>
+    <div class="text-center mb-3">
+    <button onclick="getRandomCountry()" class="btn btn-success mt-3">Random Country Generator</button>
+        </div>
+            <div id="result" class="d-flex justify-content-center shadow">
+            </div>
+</body>
+<!-- ---------------------------------------------------------------- -->
+
+<!-- ---------------------------------------------------------------- -->
+<script>
+    const getRandomCountry = async()=>{
+    try {
+        const reponse = await fetch("https://restcountries.com/v3.1/all")
+         const allCountries = await reponse.json()
+         const randomCountry = allCountries[Math.floor(Math.random()*allCountries.length)]
+         const countryName = randomCountry.name.common
+        // for currecies
+         const currencies = Object.values(randomCountry.currencies)
+         const currency = currencies[0].name
+         const symbol = currencies[0].symbol
+        const languages = Object.values(randomCountry.languages)
+         console.log(languages);
+         result.innerHTML = `
+         <div class="card p-3 w-100">
+        <h3 class="text-center">${countryName}</h3>
+        <div class="row">
+            <div class="col-lg-6">
+                <img class="img-fluid" src="${randomCountry.flags.png}" alt="country flag">
+                <br>
+                <a href="${randomCountry.maps.googleMaps}" class="mt-3" target="_blank">click here to open google map</a>
+            </div>
+            <div class="col-lg-6">
+                <div class="list-group">
+                    <div class="list-group-item">captial: ${randomCountry.capital}</div>
+                    <div class="list-group-item">population: ${randomCountry.population}</div>
+                    <div class="list-group-item">Time-zone: ${randomCountry.timezones}</div>
+                    <div class="list-group-item">continent: ${randomCountry.continents}</div>
+                    <div class="list-group-item">languages : ${languages} </div>
+                    <div class="list-group-item">currencies : ${symbol},${currency}</div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+         `
+    }catch(err){
+        console.log(err);
+        }
+    }
+</script>
+</html>
